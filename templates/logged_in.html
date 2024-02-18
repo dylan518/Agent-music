@@ -1,0 +1,90 @@
+<!-- templates/logged_in.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Logged In</title>
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
+    <script>
+        var token = "{{ access_token }}";
+        console.log("Access Token:", token);
+        var player;
+
+        window.onSpotifyWebPlaybackSDKReady = () => {
+            player = new Spotify.Player({
+                name: 'Web Playback SDK Quick Start Player',
+                getOAuthToken: cb => { cb(token); }
+            });
+
+            // Error handling
+            player.addListener('initialization_error', ({ message }) => { console.error(message); });
+            player.addListener('authentication_error', ({ message }) => { console.error(message); });
+            player.addListener('account_error', ({ message }) => { console.error(message); });
+            player.addListener('playback_error', ({ message }) => { console.error(message); });
+
+            // Ready
+            player.addListener('ready', ({ device_id }) => {
+                console.log('Ready with Device ID', device_id);
+                // Store the device ID for later use if needed
+                player._device_id = device_id;
+            });
+
+            player.connect();
+        };
+
+        // Play track by name
+        function playTrackByName(trackName) {
+            fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(trackName)}&type=track&limit=1`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.tracks && data.tracks.items.length > 0) {
+                        const trackUri = data.tracks.items[0].uri;
+
+                        // Start playback using the Spotify Connect Web API
+                        fetch(`https://api.spotify.com/v1/me/player/play?device_id=${player._device_id}`, {
+                            method: 'PUT',
+                            body: JSON.stringify({ uris: [trackUri] }),
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            }
+                        }).then(() => {
+                            player.togglePlay(); // Ensure playback starts
+                        }).then(() => {
+                            console.log(`Started playback of track ${trackName}`);
+                        }).catch(e => console.error(e));
+                    } else {
+                        console.log(`No tracks found with the name "${trackName}"`);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error searching for track:', error);
+                });
+        }
+
+        // Add the remaining control functions...
+    </script>
+</head>
+
+<body>
+    <h1>You are logged in</h1>
+    <p>Access Token: <span style="word-break: break-all;">{{ access_token }}</span></p>
+    <div>
+        <input type="text" id="trackName" placeholder="Enter Track Name" />
+        <button onclick="playTrackByName(document.getElementById('trackName').value);">Play Track by Name</button>
+    </div>
+    <div>
+        <button onclick="previousTrack();">Previous</button>
+        <button onclick="togglePlay();">Play/Pause</button>
+        <button onclick="nextTrack();">Next</button>
+    </div>
+    <a href="/logout">Logout</a>
+</body>
+
+</html>
