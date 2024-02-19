@@ -1,9 +1,10 @@
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
+"""This module provides a simple interface to the Spotify API for searching and adding songs to a queue."""
 class SpotifyInterface:
     _instance = None  # Singleton instance storage
-
+    # The __new__ method is called to create a new instance of a class
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
             cls._instance = super(SpotifyInterface, cls).__new__(cls)
@@ -39,7 +40,7 @@ class SpotifyInterface:
                 'uri': track['uri']
             }
         return None
-
+    
     def add_song_to_queue(self, track_name, artist_name=None):
         """Search for a song by name (and optional artist) and add it to the queue if found."""
         track_info = self.search_track(track_name, artist_name)
@@ -47,7 +48,7 @@ class SpotifyInterface:
             self.queue.append(track_info)
             return track_info
         return "Song not found."
-
+    
     def remove_song_from_queue(self, track_name, artist_name=None):
         """Search for a song by name (and optional artist) in the queue and remove it if found."""
         track_info = self.search_track(track_name, artist_name)
