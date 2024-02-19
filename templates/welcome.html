@@ -1,15 +1,30 @@
-<!-- templates/welcome.html -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <title>Welcome</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* Additional inline styles can go here if needed */
+        .login-button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-button:hover {
+            background-color: #555;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Welcome</h1>
-    <a href="{{ login_url }}">Login with Spotify</a>
+    <h1>Welcome to My-DJ!</h1>
+    <a href="{{ login_url }}" class="login-button">Please Login with your Spotify</a>
 </body>
 
 </html>

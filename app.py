@@ -1,9 +1,14 @@
-from flask import Flask, redirect, request, session, url_for, render_template
+from flask import Flask, redirect, request, session, url_for, render_template, jsonify
 import requests
+from queue_agent import CustomAgent
+from queue_agent import SpotifyAgentRunner
+from spotify_interface import SpotifyInterface
+import json
 
 # Your Spotify App Credentials
-CLIENT_ID = "5945bee02e274a7daf17a1f7569063f3"
-CLIENT_SECRET = "a828cbcf4df443fa854acb8aef8d164b"
+spotify_helper = SpotifyInterface()
+CLIENT_ID, CLIENT_SECRET = spotify_helper.get_client_info()
+
 REDIRECT_URI = "http://localhost:3000/callback"
 
 # Spotify URLs
@@ -51,6 +56,30 @@ def callback():
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
+@app.route('/get_next_track')
+def get_next_track():
+    spotify = spotify_helper.get
+
+@app.route('/update_queue')
+def update_queue():
+    queue_json = request.args.get('queue')
+    messages_json = request.args.get('messages')
+    
+    # Convert JSON strings to Python objects
+    queue = json.loads(queue_json)
+    messages = json.loads(messages_json)
+    print(queue)
+    print(messages)
+    
+    agent = SpotifyAgentRunner()
+    updated_queue,messsages = agent.main(queue, messages)
+    
+    # Assuming updated_queue is a list of track URIs
+    print("UPDATE")
+    print(updated_queue)
+    return jsonify({"updated_queue": updated_queue, "messages": messages})
+    
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000, debug=True)

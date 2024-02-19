@@ -1,0 +1,64 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+}
+
+#current-track {
+    margin-top: 20px;
+}
+
+#track-info {
+    margin-top: 10px;
+}
+
+#trackQueue {
+    list-style-type: none;
+    padding: 0;
+}
+
+#trackQueue li {
+    background-color: #e2e2e2;
+    padding: 10px;
+    margin-bottom: 5px;
+}
+
+button {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+input[type="text"] {
+    margin-top: 10px;
+    padding: 10px;
+    margin-right: 5px;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: #333;
+}
+
+a {
+    display: inline-block;
+    margin-top: 20px;
+    color: #333;
+}
+
+.hidden {
+    display: none;
+}
