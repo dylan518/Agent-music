@@ -16,11 +16,6 @@ class SpotifyAgentRunner:
     """SpotifyAgentRunner is a class that runs the Spotify agent. It has a method called main that takes a queue and a list of messages as input and returns the updated queue and messages."""
 
     def __init__(self, thread_id=None):
-        OPENAI_API_KEY = "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"
-
-        def _handle_error(error) -> str:
-            return str(error)[:50]
-
         self.custom_agent = CustomAgent()
         self.custom_tools = self.generate_tools()
         os.environ[

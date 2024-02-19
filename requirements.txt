@@ -1,0 +1,5 @@
+Flask==2.2.5
+requests==2.31.0
+langchain==0.0.350
+openai==1.8.0
+spotipy==2.19.0
